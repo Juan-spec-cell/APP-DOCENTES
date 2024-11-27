@@ -45,15 +45,16 @@ const Home = () => {
   };
 
   const getTotalEstudiantes = () => {
-    const estudiantesUnicos = new Set();
+    let totalEstudiantes = 0;
+  
     asignaturas.forEach((asignatura) => {
-      matriculas.forEach((matricula) => {
-        if (matricula.asignaturas.some((a) => a.id === asignatura.id)) {
-          estudiantesUnicos.add(matricula.id);
-        }
-      });
+      const estudiantesEnAsignatura = matriculas.filter((matricula) =>
+        matricula.asignaturas.some((a) => a.id === asignatura.id)
+      ).length;
+      totalEstudiantes += estudiantesEnAsignatura;
     });
-    return estudiantesUnicos.size;
+  
+    return totalEstudiantes;
   };
 
   return (
@@ -127,7 +128,7 @@ const Home = () => {
               </div>
             ) : (
               asignaturas.map((asignatura) => (
-                <div key={asignatura.id} className="col-md-4 mb-4">
+                <div key={asignatura.id} className="col-lg-3 col-md-4 mb-4">
                   <div className="card">
                     <div className="card-header">
                       <h5 className="m-0">{asignatura.nombre_asignatura}</h5>
@@ -156,6 +157,7 @@ const Home = () => {
               ))
             )}
           </div>
+
 
           {!loading && !error && asignaturas.length === 0 && (
             <div className="alert alert-info">
