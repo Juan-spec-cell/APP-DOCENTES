@@ -1,13 +1,15 @@
 import React, { useContext } from "react";
-import { UsuarioContext } from "../Contexto/usuario/UsuarioContext"; // Asegúrate de que la ruta sea correcta
+import { UsuarioContext } from "../../Contexto/usuario/UsuarioContext"; 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom"; // Puedes usar Link para navegación sin recargar la página
+import { Link } from "react-router-dom"; 
 
 const Header = () => {
-  const { usuario, setCerrarSesion } = useContext(UsuarioContext);
+  const { usuario, setCerrarSesion } = useContext(UsuarioContext); 
 
+  console.log("Usuario en Header:", usuario);
   const handleLogout = () => {
+
     setCerrarSesion();
   };
 
