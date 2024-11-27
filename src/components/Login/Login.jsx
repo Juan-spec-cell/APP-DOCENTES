@@ -48,7 +48,9 @@ const Login = () => {
             primerNombre: Usuario.primerNombre,
             primerApellido: Usuario.primerApellido,
             tipo: Usuario.tipo,
-            login: Usuario.login, // Guardamos el nombre completo aquí
+            login: Usuario.login,
+            id: Usuario.id,
+            docenteId: Usuario.docenteId  // Add this line
           }, 
           token: Token 
         });

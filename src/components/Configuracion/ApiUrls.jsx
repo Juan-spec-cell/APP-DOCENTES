@@ -9,3 +9,6 @@ export const ListarCarreras = 'carreras/listar';
 export const ListarAsignaturas = 'asignaturas/listar';
 export const ListarPeriodos = 'periodos/listar';
 export const CrearMatricula = 'matriculas/guardar';
+export const ListarUsuario = 'usuarios/listar';
+export const ListarDocentes = 'docentes/listar'; 
+export const BuscarAsignaturasDocente = 'asignaturas/buscar_docente';
