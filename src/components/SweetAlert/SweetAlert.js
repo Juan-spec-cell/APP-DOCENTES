@@ -35,9 +35,9 @@ export function mostraAlertaPregunta(accion, mensaje, icono, foco) {
     MySwal.fire({
         title: mensaje,
         icon: 'question',
-        confirmButtonText: 'Factura',
+        confirmButtonText: 'Si',
         showConfirmButton: true,
-        cancelButtonText: 'Recibo',
+        cancelButtonText: 'No',
         showCancelButton: true,
     }).then((re) => {
         if (re.isConfirmed) {

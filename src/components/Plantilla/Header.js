@@ -5,11 +5,9 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom"; // Puedes usar Link para navegación sin recargar la página
 
 const Header = () => {
-  const { usuario, setCerrarSesion } = useContext(UsuarioContext); // Accede al usuario desde el contexto
-  // Agrega un log para verificar el valor de usuario
-  console.log("Usuario en Header:", usuario);
+  const { usuario, setCerrarSesion } = useContext(UsuarioContext);
+
   const handleLogout = () => {
-    // Llama a setCerrarSesion para cerrar sesión y limpiar el estado
     setCerrarSesion();
   };
 

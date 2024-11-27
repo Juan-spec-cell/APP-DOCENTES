@@ -42,7 +42,6 @@ const Login = () => {
       if (response && response.data) {
         const { Token, Usuario } = response.data;
   
-        // Guardar los datos relevantes del usuario
         setLogin({ 
           usuario: {
             primerNombre: Usuario.primerNombre,
@@ -50,12 +49,11 @@ const Login = () => {
             tipo: Usuario.tipo,
             login: Usuario.login,
             id: Usuario.id,
-            docenteId: Usuario.docenteId  // Add this line
+            docenteId: Usuario.docenteId
           }, 
           token: Token 
         });
   
-        // Redirigir según el tipo de usuario
         if (Usuario.tipo === "Estudiante") {
           navigate("/dashboard-estudiante");
         } else if (Usuario.tipo === "Docente") {
@@ -64,20 +62,16 @@ const Login = () => {
           navigate("/dashboard");
         }
   
-        console.log("Login successful:", response.data);
         mostraAlertaOK("Inicio de sesión exitoso", "success");
       } else {
-        console.error("Login failed: response data is undefined");
         mostraAlertaError(
           "Error en el inicio de sesión. Por favor, inténtelo de nuevo.",
           "error"
         );
       }
     } catch (error) {
-      setError("Error en el inicio de sesión. Por favor, inténtelo de nuevo.");
-      console.error("Login failed:", error);
       mostraAlertaError(
-        "Contraseña o Correo electrónico incorrecto. Por favor, inténtelo de nuevo.",
+        "Contraseña o Correo electrónico incorrecto.",
         "error"
       );
     }

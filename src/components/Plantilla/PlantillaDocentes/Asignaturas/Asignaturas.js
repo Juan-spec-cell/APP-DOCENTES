@@ -1,7 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AxiosPublico } from '../../../Axios/Axios';
+import { ListarAsignaturas } from '../../../Configuracion/ApiUrls';
+import { UsuarioContext } from '../../../Contexto/usuario/UsuarioContext';
 
 const Asignaturas = () => {
+  const [asignaturas, setAsignaturas] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { usuario } = useContext(UsuarioContext);
+
+  useEffect(() => {
+    const fetchAsignaturas = async () => {
+      try {
+        const response = await AxiosPublico.get(ListarAsignaturas);
+        const userAsignaturas = response.data.datos.filter(
+          asignatura => asignatura.nombre_docente === usuario.login
+        );
+        setAsignaturas(userAsignaturas);
+      } catch (error) {
+        setError('Error al cargar las asignaturas');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAsignaturas();
+  }, [usuario]);
+
   return (
     <div className="content-wrapper">
       <div className="content-header">
@@ -27,37 +53,43 @@ const Asignaturas = () => {
               <h3 className="card-title">Lista de Asignaturas</h3>
             </div>
             <div className="card-body table-responsive p-0">
-              <table className="table table-hover text-nowrap">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Docente</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {/* Map through your asignaturas data */}
-                  <tr>
-                    <td data-label="ID">1</td>
-                    <td data-label="Nombre">Matemáticas</td>
-                    <td data-label="Docente">Juan Pérez</td>
-                    <td data-label="Acciones">
-                      <div className="btn-group">
-                        <button className="btn btn-sm btn-info me-2">
-                          <i className="fas fa-eye"></i>
-                        </button>
-                        <button className="btn btn-sm btn-warning me-2">
-                          <i className="fas fa-edit"></i>
-                        </button>
-                        <button className="btn btn-sm btn-danger">
-                          <i className="fas fa-trash"></i>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              {loading ? (
+                <div className="text-center p-4">
+                  <div className="spinner-border" role="status">
+                    <span className="visually-hidden">Cargando...</span>
+                  </div>
+                </div>
+              ) : error ? (
+                <div className="alert alert-danger m-3">{error}</div>
+              ) : (
+                <table className="table table-hover text-nowrap">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Nombre</th>
+                      <th>Docente</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {asignaturas.map((asignatura) => (
+                      <tr key={asignatura.id}>
+                        <td>{asignatura.id}</td>
+                        <td>{asignatura.nombre_asignatura}</td>
+                        <td>{asignatura.nombre_docente}</td>
+                        <td>
+                          <Link 
+                            to={`/dashboard-docente/asignaturas/${asignatura.id}`}
+                            className="btn btn-sm btn-info"
+                          >
+                            <i className="fas fa-eye"></i>
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         </div>
