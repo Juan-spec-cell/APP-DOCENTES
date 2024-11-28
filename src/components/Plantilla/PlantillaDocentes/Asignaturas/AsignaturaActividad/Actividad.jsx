@@ -3,13 +3,13 @@ import { AxiosPublico } from '../../../../Axios/Axios';
 import { mostraAlerta, mostraAlertaOK } from '../../../../SweetAlert/SweetAlert';
 import { GuardarActividad } from '../../../../Configuracion/ApiUrls';
 
-const CrearActividad = ({ asignaturaNombre, parcial, onSuccess }) => {
+const CrearActividad = ({ asignaturaNombre, contexto, onSuccess }) => {
     const [formData, setFormData] = useState({
         nombre_asignatura: asignaturaNombre,
         tipo_actividad: '',
         valor: '',
         fecha: '',
-        parcial: parcial
+        parcial: contexto
     });
     const [loading, setLoading] = useState(false);
 
@@ -17,9 +17,9 @@ const CrearActividad = ({ asignaturaNombre, parcial, onSuccess }) => {
         setFormData(prevState => ({
             ...prevState,
             nombre_asignatura: asignaturaNombre,
-            parcial: parcial
+            parcial: contexto
         }));
-    }, [asignaturaNombre, parcial]);
+    }, [asignaturaNombre, contexto]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -41,8 +41,8 @@ const CrearActividad = ({ asignaturaNombre, parcial, onSuccess }) => {
         }
 
         try {
-            const { nombre_asignatura, tipo_actividad, fecha, valor } = formData;
-            const response = await AxiosPublico.post(GuardarActividad, { nombre_asignatura, tipo_actividad, fecha, valor });
+            const { nombre_asignatura, tipo_actividad, fecha, valor, parcial } = formData;
+            const response = await AxiosPublico.post(GuardarActividad, { nombre_asignatura, tipo_actividad, fecha, valor, parcial });
             if (response.status === 201) {
                 mostraAlertaOK('Actividad creada exitosamente');
                 onSuccess?.({ ...formData, id: response.data.data.id });

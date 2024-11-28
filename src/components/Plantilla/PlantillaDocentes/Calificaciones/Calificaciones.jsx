@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { AxiosPublico } from "../../../Axios/Axios";
 import { UsuarioContext } from "../../../Contexto/usuario/UsuarioContext";
@@ -9,9 +9,14 @@ import {
   EditarCalificacion,
   EliminarCalificacion,
   ListarMatriculas,
+  ListarActividades,
 } from "../../../Configuracion/ApiUrls";
+import CrearActividad from "../Asignaturas/AsignaturaActividad/Actividad";
 
 const Calificaciones = () => {
+  const [actividades, setActividades] = useState([]);
+  const [selectedActividad, setSelectedActividad] = useState("");
+  const [actividadValor, setActividadValor] = useState("");
   const [calificaciones, setCalificaciones] = useState([]);
   const [asignaturas, setAsignaturas] = useState([]);
   const [matriculas, setMatriculas] = useState([]);
@@ -27,16 +32,31 @@ const Calificaciones = () => {
     actividadId: "",
   });
   const [editingId, setEditingId] = useState(null);
+  <div className="col-md-2">
+    <div className="form-group">
+      <label>ID Actividad</label>
+      <input
+        type="text"
+        className="form-control"
+        value={formData.actividadId}
+        onChange={(e) =>
+          setFormData({ ...formData, actividadId: e.target.value })
+        }
+        required
+      />
+    </div>
+  </div>;
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const [asignaturasRes, matriculasRes, calificacionesRes] = await Promise.all([
-        AxiosPublico.get(ListarAsignaturas),
-        AxiosPublico.get(ListarMatriculas),
-        AxiosPublico.get(ListarCalificaciones),
-      ]);
+const fetchData = async () => {
+  try {
+    setLoading(true);
+    const [asignaturasRes, matriculasRes, calificacionesRes] = await Promise.all([
+      AxiosPublico.get(ListarAsignaturas),
+      AxiosPublico.get(ListarMatriculas),
+      AxiosPublico.get(ListarCalificaciones),
+    ]);
 
+    if (asignaturasRes.data && matriculasRes.data && calificacionesRes.data) {
       const docenteAsignaturas = asignaturasRes.data.datos.filter(
         (asignatura) => asignatura.nombre_docente === usuario.login
       );
@@ -48,13 +68,16 @@ const Calificaciones = () => {
         asignaturasNames.includes(cal.nombre_asignatura)
       );
       setCalificaciones(filteredCalificaciones);
-    } catch (err) {
+    } else {
       setError("Error al cargar los datos");
-      console.error(err);
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch (err) {
+    setError("Error al cargar los datos");
+    console.error(err);
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     fetchData();
@@ -79,7 +102,7 @@ const Calificaciones = () => {
     }
   };
 
-  const handleAsignaturaChange = (e) => {
+  const handleAsignaturaChange = async (e) => {
     const asignaturaId = parseInt(e.target.value);
     setSelectedAsignatura(asignaturaId);
     if (asignaturaId) {
@@ -97,6 +120,22 @@ const Calificaciones = () => {
         ...prev,
         nombre_asignatura: asignatura.nombre_asignatura,
       }));
+  
+      // Fetch actividades for the selected asignatura
+      try {
+        const response = await AxiosPublico.get(ListarActividades);
+        if (response.data?.datos) {
+          const actividadesFiltradas = response.data.datos.filter(
+            (actividad) => actividad.nombre_asignatura.toLowerCase() === 
+                           asignatura.nombre_asignatura.toLowerCase()
+          );
+          setActividades(actividadesFiltradas);
+        } else {
+          setActividades([]);
+        }
+      } catch (err) {
+        console.error('Error fetching actividades:', err);
+      }
     } else {
       setEstudiantes([]);
       setFormData((prev) => ({
@@ -104,7 +143,19 @@ const Calificaciones = () => {
         nombre_asignatura: "",
         nombre_estudiante: "",
       }));
+      setActividades([]);
     }
+  };
+
+  const handleActividadChange = (e) => {
+    const actividadId = e.target.value;
+    setSelectedActividad(actividadId);
+    const actividad = actividades.find((a) => a.id === parseInt(actividadId));
+    setActividadValor(actividad ? actividad.valor : "");
+    setFormData((prev) => ({
+      ...prev,
+      actividadId: actividadId,
+    }));
   };
 
   const resetForm = () => {
@@ -158,7 +209,10 @@ const Calificaciones = () => {
       <section className="content">
         <div className="container-fluid">
           {error && (
-            <div className="alert alert-danger alert-dismissible fade show" role="alert">
+            <div
+              className="alert alert-danger alert-dismissible fade show"
+              role="alert"
+            >
               {error}
               <button
                 type="button"
@@ -204,7 +258,10 @@ const Calificaciones = () => {
                         className="form-control"
                         value={formData.nombre_estudiante}
                         onChange={(e) =>
-                          setFormData({ ...formData, nombre_estudiante: e.target.value })
+                          setFormData({
+                            ...formData,
+                            nombre_estudiante: e.target.value,
+                          })
                         }
                         required
                         disabled={!selectedAsignatura}
@@ -216,6 +273,35 @@ const Calificaciones = () => {
                           </option>
                         ))}
                       </select>
+                    </div>
+                  </div>
+                  <div className="col-md-2">
+                    <div className="form-group">
+                      <label>Tipo Actividad</label>
+                      <select
+                        className="form-control"
+                        value={selectedActividad}
+                        onChange={handleActividadChange}
+                        required
+                      >
+                        <option value="">Seleccione una actividad</option>
+                        {actividades.map((actividad) => (
+                          <option key={actividad.id} value={actividad.id}>
+                            {actividad.tipo_actividad}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <div className="col-md-2">
+                    <div className="form-group">
+                      <label>Valor Actividad</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={actividadValor}
+                        readOnly
+                      />
                     </div>
                   </div>
                   <div className="col-md-2">
@@ -235,20 +321,7 @@ const Calificaciones = () => {
                       />
                     </div>
                   </div>
-                  <div className="col-md-2">
-                    <div className="form-group">
-                      <label>ID Actividad</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={formData.actividadId}
-                        onChange={(e) =>
-                          setFormData({ ...formData, actividadId: e.target.value })
-                        }
-                        required
-                      />
-                    </div>
-                  </div>
+                  
                 </div>
                 <div className="row mt-3">
                   <div className="col">
@@ -310,8 +383,10 @@ const Calificaciones = () => {
                                     calificacion.nombre_asignatura
                                 );
                                 setFormData({
-                                  nombre_estudiante: calificacion.nombre_estudiante,
-                                  nombre_asignatura: calificacion.nombre_asignatura,
+                                  nombre_estudiante:
+                                    calificacion.nombre_estudiante,
+                                  nombre_asignatura:
+                                    calificacion.nombre_asignatura,
                                   nota: calificacion.nota,
                                   actividadId: calificacion.actividadId,
                                 });
