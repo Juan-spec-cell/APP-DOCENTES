@@ -16,6 +16,7 @@ import Home from "../Plantilla/PlantillaDocentes/Home";
 import Asignaturas from "../Plantilla/PlantillaDocentes/Asignaturas/Asignaturas";
 import Calificaciones from "../Plantilla/PlantillaDocentes/Calificaciones/Calificaciones";
 import Asistencias from "../Plantilla/PlantillaDocentes/Asistencias/Asistencias";
+import AsignaturaDetalle from "../Plantilla/PlantillaDocentes/Asignaturas/AsignaturaDetalle/AsignaturaDetalle";
 
 export const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -30,11 +31,12 @@ export const routes = createBrowserRouter(
       <Route element={<AutenticacionRoute />}>
         <Route path="/dashboard-estudiante" element={<Estudiantes />} />
         <Route path="/dashboard-docente" element={<Docente />}>
-        <Route index element={<Home />} />
-        <Route path="asignaturas" element={<Asignaturas />} />
-        <Route path="calificaciones" element={<Calificaciones />} />
-        <Route path="asistencias" element={<Asistencias />} />
-      </Route>
+          <Route index element={<Home />} />
+          <Route path="asignaturas" element={<Asignaturas />} />
+          <Route path="asignaturas/:id" element={<AsignaturaDetalle />} />
+          <Route path="calificaciones" element={<Calificaciones />} />
+          <Route path="asistencias" element={<Asistencias />} />
+        </Route>
         <Route path="/app/home" element={<PageHome />} />
       </Route>
     </Route>

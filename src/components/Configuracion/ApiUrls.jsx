@@ -33,3 +33,7 @@ export const ListarCalificaciones = 'calificaciones/listar';
 export const GuardarCalificacion = 'calificaciones/guardar';
 export const EditarCalificacion = 'calificaciones/editar';
 export const EliminarCalificacion = 'calificaciones/eliminar';
+
+// Actividades endpoints
+export const ListarActividades = 'actividades/listar';
+export const GuardarActividad = 'actividades/guardar';

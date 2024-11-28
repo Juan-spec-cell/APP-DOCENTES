@@ -59,7 +59,7 @@ const Login = () => {
         } else if (Usuario.tipo === "Docente") {
           navigate("/dashboard-docente");
         } else {
-          navigate("/dashboard");
+          navigate("/");
         }
   
         mostraAlertaOK("Inicio de sesión exitoso", "success");
