@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { UsuarioContext } from "../Contexto/usuario/UsuarioContext"; // Asegúrate de que la ruta sea correcta
+import { UsuarioContext } from "../../Contexto/usuario/UsuarioContext"; // Asegúrate de que la ruta sea correcta
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom"; // Puedes usar Link para navegación sin recargar la página

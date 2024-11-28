@@ -5,9 +5,9 @@ const SideNav = () => {
       {/* Main Sidebar Container */}
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
         {/* Brand Logo */}
-        <a href="index3.html" className="brand-link" style={{ textDecoration: 'none'}}>
-          <img src="dist/img/UCBerkeleylogo.png" alt="AdminLTE Logo" className="brand-image img-circle elevation-2 mt-2" style={{ opacity: '.8', width: '40px', height:'70px'}} />
-          <span className="fs-2 brand-text font-weight-light">BERKELEY</span>
+        <a href="" className="brand-link" style={{ textDecoration: 'none'}}>
+          <img src="dist/img/UCBerkeleylogo.png" alt="AdminLTE Logo" className="brand-image img-circle elevation-1 mt-1" style={{ opacity: '.9', width: '45px', height:'90px'}} />
+          <span className="h2">BERKELEY</span>
         </a>
         {/* Sidebar */}
         <div className="sidebar">

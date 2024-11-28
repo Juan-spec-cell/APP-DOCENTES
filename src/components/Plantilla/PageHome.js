@@ -1,8 +1,8 @@
 import React from 'react';
-import Header from '../Plantilla/Header';
-import SideNav from '../Plantilla/SideNav';
-import Home from '../Plantilla/Home';
-import Footer from '../Plantilla/Footer';
+import Header from '../Plantilla/PlantillaEstudiantes/Header';
+import SideNav from '../Plantilla/PlantillaEstudiantes/SideNav';
+import Home from '../Plantilla/PlantillaEstudiantes/Home';
+import Footer from '../Plantilla/PlantillaEstudiantes/Footer';
 
 const PageHome = () => {
     return (
