@@ -38,7 +38,7 @@ const Asignaturas = () => {
             </div>
             <div className="col-12 col-sm-6 mt-2 mt-sm-0">
               <ol className="breadcrumb float-sm-end justify-content-center justify-content-sm-end">
-                <li className="breadcrumb-item"><Link to="/dashboard">Home</Link></li>
+                <li className="breadcrumb-item"><Link to="/dashboard-docente">Home</Link></li>
                 <li className="breadcrumb-item active">Asignaturas</li>
               </ol>
             </div>
@@ -66,7 +66,7 @@ const Asignaturas = () => {
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Nombre</th>
+                      <th>Asignatura</th>
                       <th>Docente</th>
                       <th>Acciones</th>
                     </tr>

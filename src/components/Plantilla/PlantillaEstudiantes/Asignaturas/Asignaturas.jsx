@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { AxiosPublico } from "../../Axios/Axios";
-import { useSessionStorage } from "../../Contexto/storage/useSessionStorage";
-import { ListarMatriculas } from "../../Configuracion/ApiUrls"; // Asegúrate de que la ruta sea correcta
+import { AxiosPublico } from "../../../Axios/Axios";
+import { useSessionStorage } from "../../../Contexto/storage/useSessionStorage";
+import { ListarMatriculas } from "../../../Configuracion/ApiUrls"; // Asegúrate de que la ruta sea correcta
 
-const Home = () => {
+const Asignaturas = () => {
   const [loading, setLoading] = useState(true);
   const [asignaturas, setAsignaturas] = useState([]);
-  const [matriculas, setMatriculas] = useState([]);
   const [error, setError] = useState(null);
   const [storedEmail] = useSessionStorage("userEmail", "");
 
@@ -24,7 +23,6 @@ const Home = () => {
         const userAsignaturas = userMatriculas.flatMap((matricula) => matricula.asignaturas);
 
         setAsignaturas(userAsignaturas);
-        setMatriculas(userMatriculas);
       } catch (error) {
         setError("Error al cargar los datos. Por favor, intente más tarde.");
       } finally {
@@ -53,30 +51,24 @@ const Home = () => {
                 </div>
               </div>
             ) : (
-              asignaturas.map((asignatura) => (
-                <div key={asignatura.id} className="col-12 col-sm-6 col-lg-3 mb-4">
-                  <div className="card h-100 shadow-sm hover-card">
-                    <div className="card-header bg-success bg-opacity-10 py-2 px-3">
-                      <h5 className="text-truncate w-100 fs-1">{asignatura.nombre_asignatura}</h5>
-                    </div>
-                    <div className="card-body d-flex flex-column">
-                      <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-3">
-                        <p className="card-text mb-2 mb-sm-0 text-truncate">
-                          <i className="fas fa-user-tie me-2"></i>
-                          <strong>Docente:</strong> {asignatura.docente_nombre}
-                        </p>
-                      </div>
-                      <Link
-                        to={`/dashboard-estudiante/asignaturas/${asignatura.id}`}
-                        className="btn btn-info mt-auto"
-                      >
-                        <i className="fas fa-eye me-2"></i>
-                        Ver Detalles
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ))
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nombre Asignatura</th>
+                    <th>Nombre Docente</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {asignaturas.map((asignatura) => (
+                    <tr key={asignatura.id}>
+                      <td>{asignatura.id}</td>
+                      <td>{asignatura.nombre_asignatura}</td>
+                      <td>{asignatura.docente_nombre}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             )}
           </div>
 
@@ -92,4 +84,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Asignaturas;

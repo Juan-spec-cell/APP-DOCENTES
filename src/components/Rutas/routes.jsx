@@ -10,14 +10,18 @@ import RecuperarContrasena from "../Login/RecuperarContrasena/RecuperarContrasen
 import RegistroEstudiante from "../Login/RegistroEstudiante/RegistroEstudiante";
 import Docente from "../Docentes/Docentes";
 import { AutenticacionRoute } from "./AutenticacionRoute";
-import PageHome from "../Plantilla/PageHome";
 import MatriculaEstudiante from "../Login/MatriculaEstudiante/MatriculaEstudiante";
-import Home from "../Plantilla/PlantillaDocentes/Home";
+// Docentes
+import HomeDocente from "../Plantilla/PlantillaDocentes/Home";
 import Asignaturas from "../Plantilla/PlantillaDocentes/Asignaturas/Asignaturas";
 import Calificaciones from "../Plantilla/PlantillaDocentes/Calificaciones/Calificaciones";
 import Asistencias from "../Plantilla/PlantillaDocentes/Asistencias/Asistencias";
 import AsignaturaDetalle from "../Plantilla/PlantillaDocentes/Asignaturas/AsignaturaDetalle/AsignaturaDetalle";
-
+// Estudiantes 
+import HomeEstudiante from "../Plantilla/PlantillaEstudiantes/Home";
+import AsignaturasEstudiante from "../Plantilla/PlantillaEstudiantes/Asignaturas/Asignaturas";
+import AsignaturaDetalleEstudiante from "../Plantilla/PlantillaEstudiantes/Asignaturas/AsignaturaDetalle/AsignaturaDetalle";
+import CalendarioEstudiante from "../Plantilla/PlantillaEstudiantes/Calendario/Calendario"
 export const routes = createBrowserRouter(
   createRoutesFromElements(
     <Route>
@@ -29,15 +33,21 @@ export const routes = createBrowserRouter(
 
       {/* Protected Routes */}
       <Route element={<AutenticacionRoute />}>
-        <Route path="/dashboard-estudiante" element={<Estudiantes />} />
         <Route path="/dashboard-docente" element={<Docente />}>
-          <Route index element={<Home />} />
+          <Route index element={<HomeDocente />} />
           <Route path="asignaturas" element={<Asignaturas />} />
           <Route path="asignaturas/:id" element={<AsignaturaDetalle />} />
           <Route path="calificaciones" element={<Calificaciones />} />
           <Route path="asistencias" element={<Asistencias />} />
         </Route>
-        <Route path="/app/home" element={<PageHome />} />
+      </Route>
+      <Route element={<AutenticacionRoute />}>
+        <Route path="/dashboard-estudiante" element={<Estudiantes />}>
+          <Route index element={<HomeEstudiante />} />
+          <Route path="asignaturas" element={<AsignaturasEstudiante />} />
+          <Route path="asignaturas/:id" element={<AsignaturaDetalleEstudiante />} />
+          <Route path="calendario" element={<CalendarioEstudiante />} />
+        </Route>
       </Route>
     </Route>
   )

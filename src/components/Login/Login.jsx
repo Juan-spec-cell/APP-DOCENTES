@@ -10,50 +10,52 @@ import {
   mostraAlertaOK,
   mostraAlertaError,
 } from "../SweetAlert/SweetAlert";
-import { UsuarioContext } from "../Contexto/usuario/UsuarioContext"; // Asegúrate de que la ruta sea correcta
+import { UsuarioContext } from "../Contexto/usuario/UsuarioContext";
+import { useSessionStorage } from "../Contexto/storage/useSessionStorage"; 
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [error, setError] = useState("");
-  const { setLogin } = useContext(UsuarioContext); // Acceder al contexto de Usuario
+  const { setLogin } = useContext(UsuarioContext);
+  const [storedEmail, setStoredEmail] = useSessionStorage("userEmail", "");
 
   useEffect(() => {
-    // Al acceder a la página de inicio de sesión, cerrar sesión y eliminar el token
-    // Esto asegura que cualquier usuario anterior que estaba logueado se cierre sesión automáticamente.
-    setLogin({ usuario: null, token: null }); // Reseteamos el estado
+    setLogin({ usuario: null, token: null });
   }, [setLogin]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     if (!email || !password) {
       mostraAlerta("Por favor, complete todos los campos.", "warning");
       return;
     }
-  
+
     try {
       const response = await AxiosPublico.post(UsuarioIniciarSesion, {
         login: email,
         contrasena: password,
       });
-  
+
       if (response && response.data) {
         const { Token, Usuario } = response.data;
-  
-        setLogin({ 
+
+        setLogin({
           usuario: {
             primerNombre: Usuario.primerNombre,
             primerApellido: Usuario.primerApellido,
             tipo: Usuario.tipo,
             login: Usuario.login,
             id: Usuario.id,
-            docenteId: Usuario.docenteId
-          }, 
-          token: Token 
+            docenteId: Usuario.docenteId,
+          },
+          token: Token,
         });
-  
+
+        setStoredEmail(email); // Guardar el email en sessionStorage
+
         if (Usuario.tipo === "Estudiante") {
           navigate("/dashboard-estudiante");
         } else if (Usuario.tipo === "Docente") {
@@ -61,7 +63,7 @@ const Login = () => {
         } else {
           navigate("/");
         }
-  
+
         mostraAlertaOK("Inicio de sesión exitoso", "success");
       } else {
         mostraAlertaError(
@@ -92,7 +94,7 @@ const Login = () => {
         style={{
           maxWidth: "400px",
           width: "100%",
-          backgroundColor: "rgba(255, 255, 255, 0.75)", // Fondo blanco con opacidad
+          backgroundColor: "rgba(255, 255, 255, 0.75)",
         }}
       >
         <h2 className="text-center mb-4">Inicio de Sesión</h2>
@@ -100,7 +102,6 @@ const Login = () => {
         {error && <p className="text-danger text-center">{error}</p>}
 
         <form onSubmit={handleSubmit}>
-          {/* Email Input */}
           <div className="form-group position-relative">
             <input
               type="text"
@@ -122,7 +123,6 @@ const Login = () => {
             </span>
           </div>
 
-          {/* Password Input */}
           <div className="form-group position-relative">
             <input
               type="password"
@@ -144,12 +144,10 @@ const Login = () => {
             </span>
           </div>
 
-          {/* Sign In Button */}
           <button type="submit" className="btn btn-primary btn-block">
             Sign In
           </button>
 
-          {/* Separator */}
           <div className="text-center my-3 position-relative">
             <span className="text-muted">- OR -</span>
             <hr
@@ -172,7 +170,6 @@ const Login = () => {
             />
           </div>
 
-          {/* Forgot Password */}
           <Link
             to="/recuperar-contrasena"
             className="btn btn btn-info btn-block mb-2"
@@ -180,7 +177,6 @@ const Login = () => {
             Olvidé la Contraseña
           </Link>
 
-          {/* Create Account */}
           <Link to="/registro-estudiante" className="btn btn-info btn-block">
             Crear Cuenta
           </Link>

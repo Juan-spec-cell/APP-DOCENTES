@@ -197,7 +197,7 @@ const fetchData = async () => {
             <div className="col-sm-6">
               <ol className="breadcrumb float-sm-right">
                 <li className="breadcrumb-item">
-                  <Link to="/dashboard">Home</Link>
+                  <Link to="/dashboard-docente">Home</Link>
                 </li>
                 <li className="breadcrumb-item active">Calificaciones</li>
               </ol>
