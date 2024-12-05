@@ -11,7 +11,8 @@ import {
   mostraAlertaError,
 } from "../SweetAlert/SweetAlert";
 import { UsuarioContext } from "../Contexto/usuario/UsuarioContext";
-import { useSessionStorage } from "../Contexto/storage/useSessionStorage"; 
+import { useSessionStorage } from "../Contexto/storage/useSessionStorage";
+import useSpecialLogin from "../../hooks/useSpecialLogin"; // Importar el hook personalizado
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,6 +21,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const { setLogin } = useContext(UsuarioContext);
   const [storedEmail, setStoredEmail] = useSessionStorage("userEmail", "");
+  const { checkSpecialLogin } = useSpecialLogin(); // Usar el hook personalizado
 
   useEffect(() => {
     setLogin({ usuario: null, token: null });
@@ -30,6 +32,11 @@ const Login = () => {
 
     if (!email || !password) {
       mostraAlerta("Por favor, complete todos los campos.", "warning");
+      return;
+    }
+
+    // Verificar credenciales específicas para registro de docente
+    if (checkSpecialLogin(email, password)) {
       return;
     }
 

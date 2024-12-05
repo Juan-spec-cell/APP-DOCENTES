@@ -21,8 +21,9 @@ export const ImagenDocente = 'imagen/docente';
 // Académico endpoints
 export const ListarCarreras = 'carreras/listar';
 export const ListarAsignaturas = 'asignaturas/listar';
+export const CrearAsignatura = 'asignaturas/guardar';
 export const ListarPeriodos = 'periodos/listar';
-export const BuscarAsignaturasDocente = 'asignaturas/buscar_docente';
+
 
 // Matrícula endpoints
 export const CrearMatricula = 'matriculas/guardar';
